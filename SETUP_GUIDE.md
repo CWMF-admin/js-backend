@@ -32,6 +32,7 @@ npm install
    - Leave "Firebase Hosting" unchecked for now, we will deal with that later
      when we deploy.
    - Click on "register app"
+   - See `firebase-config.js` in `js-frontend` to see where to paste vars.
 3. Follow copy/paste steps (paste relevant vars into frontend `.env`)
 4. In the left sidebar, go to **Build (dropdown) -> Authentication -> "Get
    Started" -> Sign-in method** and enable:
