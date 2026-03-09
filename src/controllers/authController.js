@@ -23,12 +23,13 @@ const authController = {
         username,
         email,
         firstname,
-        lastname
-      })
+        lastname,
+        role: 'volunteer',
+      });
 
       res.status(201).json({
         message: 'User created successfully',
-        user
+        user,
       });
     } catch (error) {
       console.error('Signup error:', error);
@@ -89,6 +90,7 @@ const authController = {
         firebaseUid: decodedToken.uid,
         email: decodedToken.email,
         username: decodedToken.email?.split('@')[0] || 'user',
+        role: 'volunteer',
       });
     } catch (error) {
       console.error('ME endpoint error:', error);
@@ -141,7 +143,8 @@ const authController = {
         email: decodedToken.email,
         firstname: decodedToken.name?.split(' ')[0] || null,
         lastname: decodedToken.name?.split(' ').slice(1).join(' ') || null,
-      })
+        role: 'volunteer',
+      });
 
       res.cookie('session', idToken, {
         httpOnly: true,
