@@ -29,8 +29,6 @@ const corsOptions = {
   maxAge: 86400,
 };
 
-app.use('/api/events', eventRoutes);
-
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
@@ -42,6 +40,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/api/events', eventRoutes);
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
