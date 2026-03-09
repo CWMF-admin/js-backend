@@ -16,3 +16,18 @@ CREATE TABLE IF NOT EXISTS users (
   UNIQUE KEY idx_username     (username),
   UNIQUE KEY idx_email        (email)
 );
+
+CREATE TABLE IF NOT EXISTS events (
+  id           INT AUTO_INCREMENT PRIMARY KEY,
+  creator_id   INT NOT NULL,
+  title        VARCHAR(255) NOT NULL,
+  description  TEXT,
+  location     VARCHAR(255),
+  capacity     INT NOT NULL DEFAULT 20,
+  start_time   DATETIME NOT NULL,
+  end_time     DATETIME NOT NULL,
+  created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  CONSTRAINT fk_event_creator FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
+);
