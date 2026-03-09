@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 
 import authRoutes from './routes/authRoutes.js';
+import eventRoutes from './routes/eventRoutes.js';
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ const corsOptions = {
   credentials: true,
   maxAge: 86400,
 };
+
+app.use('/api/events', eventRoutes);
 
 app.use(cors(corsOptions));
 
