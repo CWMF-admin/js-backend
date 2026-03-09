@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   email         VARCHAR(255) NOT NULL,
   firstname     VARCHAR(100) DEFAULT NULL,
   lastname      VARCHAR(100) DEFAULT NULL,
+  role          ENUM('admin', 'volunteer') NOT NULL DEFAULT 'volunteer',
   created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
