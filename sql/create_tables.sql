@@ -11,3 +11,15 @@ CREATE TABLE IF NOT EXISTS users (
   created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
   updated_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS events (
+  id           SERIAL PRIMARY KEY,
+  creator_id   INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title        VARCHAR(255) NOT NULL,
+  description  TEXT,
+  location     VARCHAR(255),
+  capacity     INT NOT NULL DEFAULT 10,
+  start_time   TIMESTAMPTZ NOT NULL,
+  end_time     TIMESTAMPTZ NOT NULL,
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
