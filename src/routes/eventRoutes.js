@@ -1,15 +1,10 @@
 import express from 'express';
-import eventRepository from '../repositories/eventRepository.js';
+
+import eventController from '../controllers/eventController.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  try {
-    const events = await eventRepository.getAll();
-    res.json(events); // sends the data to browser
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.get('/', eventController.getAllEvents);
+router.post('/', eventController.createEvent);
 
 export default router;
