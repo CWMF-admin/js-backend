@@ -1,10 +1,29 @@
 import { pgPool } from '../config/database.js';
 
+// helper: converts a JS Date → 'YYYY-MM-DD HH:mm'
+function toScheduleXFormat(date) {
+  const d = new Date(date);
+  const yyyy = d.getUTCFullYear();
+  const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(d.getUTCDate()).padStart(2, '0');
+  const hh = String(d.getUTCHours()).padStart(2, '0');
+  const min = String(d.getUTCMinutes()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+}
+
 const eventPostgresProvider = {
   async getAll() {
     const sql = 'SELECT * FROM events ORDER BY start_time ASC';
     const { rows } = await pgPool.query(sql);
-    return rows;
+    return rows.map(event => ({
+      id:           String(event.id),
+      title:        event.title,
+      description:  event.description,
+      location:     event.location,
+      capacity:     event.capacity,
+      start:        toScheduleXFormat(event.start_time),
+      end:          toScheduleXFormat(event.end_time),
+    }));
   },
 
   async create({
@@ -38,7 +57,16 @@ const eventPostgresProvider = {
       location,
       capacity,
     ]);
-    return rows[0];
+    const event = rows[0];
+    return {
+      id:          String(event.id),
+      title:       event.title,
+      description: event.description,
+      location:    event.location,
+      capacity:    event.capacity,
+      start:       toScheduleXFormat(event.start_time),
+      end:         toScheduleXFormat(event.end_time),
+    };
   },
 };
 
