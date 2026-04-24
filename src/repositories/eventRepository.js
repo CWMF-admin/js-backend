@@ -1,15 +1,15 @@
-import { pgPool } from '../config/database.js';
+import { pool } from '../config/database.js';
 
 export default {
   async getAll() {
-    const { rows } = await pgPool.query(
+    const [rows] = await pool.execute(
       'SELECT * FROM events ORDER BY start_time ASC'
     );
     return rows;
   },
 
   async findById(id) {
-    const { rows } = await pgPool.query('SELECT * FROM events WHERE id = $1', [
+    const [rows] = await pool.execute('SELECT * FROM events WHERE id = ?', [
       id,
     ]);
     return rows[0] || null;
@@ -34,10 +34,9 @@ export default {
         start_time,
         end_time
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
-    const { rows } = await pgPool.query(sql, [
+    const [result] = await pool.execute(sql, [
       creator_id,
       title,
       description,
@@ -46,42 +45,51 @@ export default {
       start_time,
       end_time,
     ]);
-    return rows[0];
+    return this.findById(result.insertId);
   },
 
   async update(
     id,
     { title, description, location, capacity, start_time, end_time }
   ) {
-    const sql = `
+    const [result] = await pool.execute(
+      `
       UPDATE events
       SET
-        title = $2,
-        description = $3,
-        location = $4,
-        capacity = $5,
-        start_time = $6,
-        end_time = $7
-      WHERE id = $1
-      RETURNING *
-    `;
-    const { rows } = await pgPool.query(sql, [
-      id,
-      title,
-      description,
-      location,
-      capacity,
-      start_time,
-      end_time,
-    ]);
-    return rows[0] || null;
+        title = ?,
+        description = ?,
+        location = ?,
+        capacity = ?,
+        start_time = ?,
+        end_time = ?
+      WHERE id = ?
+    `,
+      [
+        title,
+        description,
+        location,
+        capacity,
+        start_time,
+        end_time,
+        id,
+      ]
+    );
+
+    if (result.affectedRows === 0) {
+      return null;
+    }
+
+    return this.findById(id);
   },
 
   async delete(id) {
-    const { rows } = await pgPool.query(
-      'DELETE FROM events WHERE id = $1 RETURNING *',
-      [id]
-    );
-    return rows[0] || null;
+    const event = await this.findById(id);
+
+    if (!event) {
+      return null;
+    }
+
+    await pool.execute('DELETE FROM events WHERE id = ?', [id]);
+    return event;
   },
 };
