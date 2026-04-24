@@ -1,4 +1,4 @@
-import provider from '../providers/eventPostgresProvider.js';
+import provider from '../providers/eventMysqlProvider.js';
 
 const eventRepository = {
   getAll: () => provider.getAll(),
