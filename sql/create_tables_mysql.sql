@@ -31,3 +31,14 @@ CREATE TABLE IF NOT EXISTS events (
 
   CONSTRAINT fk_event_creator FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS event_signups (
+  id         INT AUTO_INCREMENT PRIMARY KEY,
+  event_id   INT NOT NULL,
+  user_id    INT NOT NULL,
+  signed_up_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  UNIQUE KEY idx_event_user (event_id, user_id),
+  CONSTRAINT fk_signup_event FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+  CONSTRAINT fk_signup_user  FOREIGN KEY (user_id)  REFERENCES users(id)  ON DELETE CASCADE
+);
