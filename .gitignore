@@ -2,3 +2,4 @@
 .env
 *.ini
 node_modules/
+backend.env
