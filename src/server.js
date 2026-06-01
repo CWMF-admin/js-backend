@@ -5,6 +5,7 @@ import express from 'express';
 
 import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
+import emailRoutes from './routes/emailRoutes.js';
 
 dotenv.config();
 
@@ -75,3 +76,5 @@ app.listen(PORT, () => {
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Frontend URL: ${process.env.FRONTEND_URL}`);
 });
+
+app.use('/api/email', emailRoutes);
